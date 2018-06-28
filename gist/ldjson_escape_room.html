@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head><title>json slash try</title></head>
+<body>
+
+I am a sample html body 
+with embedded ld+json (between lines X and X')<br/>
+
+
+
+<hr/>
+<br/>
+<span style="color: red">line A : JSON String escaped only</span><br/>
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Sculpture",
+  "name" : "<\/script>"
+}
+</script>
+line A'<br/>
+<pre>
+{
+  "@context" : "http://schema.org",
+  "@type" : "Sculpture",
+  "name" : "<\/script>"
+}
+</pre>
+<br/>
+<b>pro</b>: valid LD+JSON from <a href="https://search.google.com/structured-data/testing-tool/u/0/">google testing tool</a><br/>
+<b>con</b>: invalid HTML from <a href="https://validator.w3.org/">w3c validator</a><br/>
+<pre>
+ "name" : "<\/script>"
+ character "<" is the first character of a delimiter but occurred as data.</pre><br/>
+<br/>
+
+
+
+<hr/>
+<span style="color: green">line B : Html "&lt;" + JSON String escaped</span><br/>
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Sculpture",
+  "name" : "&lt;\/script>"
+}
+</script>
+line B'<br/>
+<pre>
+{
+  "@context" : "http://schema.org",
+  "@type" : "Sculpture",
+  "name" : "&#38;lt;\/script>"
+}
+</pre>
+<br/>
+<b>pro</b>: valid HTML from <a href="https://validator.w3.org/">w3c validator</a><br/>
+<b>pro</b>: valid LD+JSON from <a href="https://search.google.com/structured-data/testing-tool/u/0/">google testing tool</a><br/>
+<br/>
+
+<hr/>
+<span style="color: green">line C : Html "&lt;" + JSON String not escaped</span><br/>
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Sculpture",
+  "name" : "&lt;/script>"
+}
+</script>
+line C'<br/>
+<pre>
+{
+  "@context" : "http://schema.org",
+  "@type" : "Sculpture",
+  "name" : "&#38;lt;/script>"
+}
+</pre>
+<br/>
+<b>pro</b>: valid HTML from <a href="https://validator.w3.org/">w3c validator</a><br/>
+<b>pro</b>: valid LD+JSON from <a href="https://search.google.com/structured-data/testing-tool/u/0/">google testing tool</a><br/>
+<br/>
+
+
+<hr/>
+<br/>
+<span style="color: red">line D: untouched (not escaped)</span><br/>
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Sculpture",
+  "name" : "</script>"
+}
+</script>
+line D'<br/>
+
+<pre>
+{
+  "@context" : "http://schema.org",
+  "@type" : "Sculpture",
+  "name" : "&lt;/script>"
+}
+</pre>
+<br/>
+<b>con</b>: invalid HTML from <a href="https://validator.w3.org/">w3c validator</a><br/>
+<pre>end tag for element "script" which is not open</pre><br/>
+<b>con</b>: invalid LD+JSON from <a href="https://search.google.com/structured-data/testing-tool/u/0/">google testing tool</a><br/>
+<pre>Erreur de syntaxe : une valeur, un objet ou un tableau doivent être indiqués.</pre><br/>
+<hr/>
+<hr/>
+
+
+
+<b>PHP notice</b> <sup>following <a href="https://stackoverflow.com/questions/10210338/json-encode-escaping-forward-slashes/10210433#10210433">SO POST</a></sup>:<br/>
+json_encode("&lt;/script>") => "&lt;\/script>"<br/>
+json_encode("http://localhost") => "http:\/\/localhost"<br/>
+json_encode("http://localhost", JSON_UNESCAPED_SLASHES) => "http://localhost"<br/>
+</body>
+</html>
